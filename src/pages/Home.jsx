@@ -1,4 +1,4 @@
-import ProductCard from "../components/ProductCard";
+import ProductList from "../components/product/ProductList";
 
 export default function Home() {
   return (
@@ -12,15 +12,7 @@ export default function Home() {
         </div>
       </section>
       <section className="flex justify-center items-center py-5 px-5 xl:px-0">
-        <ul className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </ul>
+        <ProductList />
       </section>
     </>
   );

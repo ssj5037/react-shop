@@ -1,7 +1,7 @@
 import { FaReact } from "react-icons/fa";
 import { BsCart2, BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import RSButton from "./RSButton";
+import RSButton from "../button/RSButton";
 
 export default function Header() {
   return (
