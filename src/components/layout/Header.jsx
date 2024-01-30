@@ -2,8 +2,19 @@ import { FaReact } from "react-icons/fa";
 import { BsCart2, BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import RSButton from "../RS/RSButton";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Header() {
+  const { auth, user } = useAuth();
+
+  const handleLogin = () => {
+    auth.loginWithGoogle();
+  };
+
+  const handleLogout = () => {
+    auth.logout();
+  };
+
   return (
     <header className="p-5 pb-6 border-b mb-10 shadow-sm">
       <div className="flex items-center max-w-screen-xl m-auto">
@@ -33,16 +44,33 @@ export default function Header() {
         </nav>
         {/* user */}
         <div className="flex flex-1 items-center justify-end gap-5">
-          <Link to="/cart">
-            <BsCart2 className="text-2xl text-blue-400 hover:text-blue-300" />
-          </Link>
+          <div className="flex justify-center items-center gap-1">
+            {user ? (
+              <>
+                <img src={user.photoURL} className="w-8 h-8 rounded-full" />
+                <p>
+                  <b>{user.displayName}</b>님 안녕하세요
+                </p>
+              </>
+            ) : (
+              <p>로그인 후 이용가능합니다.</p>
+            )}
+          </div>
           <Link to="/new">
             <BsPencilSquare className="text-xl text-blue-400 hover:text-blue-300" />
           </Link>
-          <p className="">
-            <b>신수진</b>님 안녕하세요
-          </p>
-          <RSButton className="py-1">로그인</RSButton>
+          <Link to="/cart">
+            <BsCart2 className="text-2xl text-blue-400 hover:text-blue-300" />
+          </Link>
+          {user ? (
+            <RSButton className="py-1" onClick={handleLogout}>
+              로그아웃
+            </RSButton>
+          ) : (
+            <RSButton className="py-1" onClick={handleLogin}>
+              로그인
+            </RSButton>
+          )}
         </div>
       </div>
     </header>
