@@ -1,6 +1,6 @@
 import { BsTrash } from "react-icons/bs";
 import { PiMinus, PiPlus } from "react-icons/pi";
-import RSSvgButton from "../button/RSSvgButton";
+import RSSvgButton from "../RS/RSSvgButton";
 
 export default function CartCard() {
   return (

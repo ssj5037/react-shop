@@ -1,6 +1,6 @@
 import { PiMinus, PiPlus } from "react-icons/pi";
-import RSButton from "../components/button/RSButton";
-import RSSvgButton from "../components/button/RSSvgButton";
+import RSButton from "../components/RS/RSButton";
+import RSSvgButton from "../components/RS/RSSvgButton";
 
 export default function Product() {
   return (

@@ -1,6 +1,6 @@
 import { PiEquals, PiPlus } from "react-icons/pi";
 import CartCard from "../components/cart/CartCard";
-import RSButton from "../components/button/RSButton";
+import RSButton from "../components/RS/RSButton";
 
 export default function Cart() {
   return (
