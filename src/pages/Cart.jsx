@@ -1,41 +1,34 @@
 import { PiEquals, PiPlus } from "react-icons/pi";
 import CartCard from "../components/cart/CartCard";
 import RSButton from "../components/RS/RSButton";
+import { useCart } from "../hooks/useCart";
+import PriceCard from "../components/cart/PriceCard";
 
+const SHIPPING = 3000;
 export default function Cart() {
+  const { isLoading, data } = useCart();
+
+  if (isLoading) return <div>로딩중</div>;
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="text-center pb-10 border-b text-4xl mb-10 font-semibold text-blue-500">
         내 장바구니
       </div>
-
-      <ul className="flex flex-col gap-5 pb-10 border-b">
-        <CartCard />
-        <CartCard />
-        <CartCard />
+      <ul className="flex flex-col gap-5 pb-10 px-5 border-b">
+        {data.carts.length === 0 && <li>장바구니에 상품이 없습니다.</li>}
+        {data.carts.map((cart) => (
+          <CartCard key={cart.id} cart={cart} />
+        ))}
       </ul>
 
       <div className="flex justify-around items-center text-xl py-14">
-        <div className="flex flex-col justify-center items-center p-10 bg-gray-50 rounded-2xl">
-          <span>상품 총액</span>
-          <span className="text-3xl font-bold text-blue-500">55,000</span>
-        </div>
-        <p>
-          <PiPlus />
-        </p>
-        <div className="flex flex-col justify-center items-center p-10 bg-gray-50 rounded-2xl">
-          <span>배송비</span>
-          <span className="text-3xl font-bold text-blue-500">3,000</span>
-        </div>
-        <p>
-          <PiEquals />
-        </p>
-        <div className="flex flex-col justify-center items-center p-10 bg-gray-50 rounded-2xl">
-          <span>총가격</span>
-          <span className="text-3xl font-bold text-blue-500">58,000</span>
-        </div>
+        <PriceCard text="상품 총액" price={data.totalPrice} />
+        <PiPlus />
+        <PriceCard text="배송비" price={SHIPPING} />
+        <PiEquals />
+        <PriceCard text="총 가격" price={data.totalPrice + SHIPPING} />
       </div>
-      <RSButton className="w-full py-5 text-4xl ">주문하기</RSButton>
+      <RSButton className="py-5 mx-5 text-4xl">주문하기</RSButton>
     </div>
   );
 }

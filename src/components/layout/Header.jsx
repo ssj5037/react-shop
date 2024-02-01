@@ -3,25 +3,27 @@ import { BsCart2, BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import RSButton from "../RS/RSButton";
 import { useAuth } from "../../hooks/useAuth";
+import { useCart } from "../../hooks/useCart";
 
 export default function Header() {
   const { user, login, logout } = useAuth();
+  const { data } = useCart();
 
   return (
     <header className="p-5 pb-6 border-b mb-10 shadow-sm">
       <div className="flex items-center max-w-screen-xl m-auto">
         {/* logo */}
-        <div className="md:mr-20">
+        <div className="">
           <Link
             to="/"
             className="group flex items-center justify-start gap-2 text-2xl font-semibold text-blue-400"
           >
             <FaReact className="group-hover:rotate-180 transition-all duration-300" />
-            <div>React Shop</div>
+            <h1>React Shop</h1>
           </Link>
         </div>
         {/* nav */}
-        <nav className="flex-1 text-blue-950 font-bold ">
+        <nav className="md:flex-1 md:block hidden ml-20  text-blue-950 font-bold ">
           <ul className="flex gap-10">
             <li className="hover:text-blue-400">
               <Link to="/products">All</Link>
@@ -48,8 +50,11 @@ export default function Header() {
             </Link>
           )}
           {user && (
-            <Link to="/cart">
+            <Link to="/cart" className="relative">
               <BsCart2 className="text-2xl text-blue-400 hover:text-blue-300" />
+              <span className="absolute -top-1 -right-2 bg-blue-400 px-1 rounded-full text-xs text-white font-bold">
+                {data && data.carts.length}
+              </span>
             </Link>
           )}
           {user ? (
