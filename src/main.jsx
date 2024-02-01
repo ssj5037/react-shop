@@ -9,6 +9,7 @@ import Product from "./pages/Product.jsx";
 import Cart from "./pages/Cart.jsx";
 import NewProduct from "./pages/NewProduct.jsx";
 import Home from "./pages/Home.jsx";
+import ProtectedRoute from "./pages/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +19,22 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "/products/:type", element: <Products /> },
       { path: "/product/:id", element: <Product /> },
-      { path: "/cart", element: <Cart /> },
-      { path: "/new", element: <NewProduct /> },
+      {
+        path: "/cart",
+        element: (
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/new",
+        element: (
+          <ProtectedRoute adminRoute>
+            <NewProduct />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);

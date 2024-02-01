@@ -5,21 +5,13 @@ import RSButton from "../RS/RSButton";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Header() {
-  const { auth, user } = useAuth();
-
-  const handleLogin = () => {
-    auth.loginWithGoogle();
-  };
-
-  const handleLogout = () => {
-    auth.logout();
-  };
+  const { user, login, logout } = useAuth();
 
   return (
     <header className="p-5 pb-6 border-b mb-10 shadow-sm">
       <div className="flex items-center max-w-screen-xl m-auto">
         {/* logo */}
-        <div className="mr-20">
+        <div className="md:mr-20">
           <Link
             to="/"
             className="group flex items-center justify-start gap-2 text-2xl font-semibold text-blue-400"
@@ -44,30 +36,34 @@ export default function Header() {
         </nav>
         {/* user */}
         <div className="flex flex-1 items-center justify-end gap-5">
-          <div className="flex justify-center items-center gap-1">
+          <div className="flex shrink-0 justify-center items-center gap-1">
             {user ? (
               <>
                 <img src={user.photoURL} className="w-8 h-8 rounded-full" />
-                <p>
+                <p className="hidden xl:block">
                   <b>{user.displayName}</b>님 안녕하세요
                 </p>
               </>
             ) : (
-              <p>로그인 후 이용가능합니다.</p>
+              <p className="hidden xl:block">로그인 후 이용가능합니다.</p>
             )}
           </div>
-          <Link to="/new">
-            <BsPencilSquare className="text-xl text-blue-400 hover:text-blue-300" />
-          </Link>
-          <Link to="/cart">
-            <BsCart2 className="text-2xl text-blue-400 hover:text-blue-300" />
-          </Link>
+          {user && user.admin && (
+            <Link to="/new">
+              <BsPencilSquare className="text-xl text-blue-400 hover:text-blue-300" />
+            </Link>
+          )}
+          {user && (
+            <Link to="/cart">
+              <BsCart2 className="text-2xl text-blue-400 hover:text-blue-300" />
+            </Link>
+          )}
           {user ? (
-            <RSButton className="py-1" onClick={handleLogout}>
+            <RSButton className="py-1" onClick={logout}>
               로그아웃
             </RSButton>
           ) : (
-            <RSButton className="py-1" onClick={handleLogin}>
+            <RSButton className="py-1" onClick={login}>
               로그인
             </RSButton>
           )}
