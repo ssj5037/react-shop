@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import RSButton from "../components/RS/RSButton";
 import RSInput from "../components/RS/RSInput";
-import { useNavigate } from "react-router-dom";
-import { imageUpload, writeProduct } from "../api/product";
-import { useMutation } from "@tanstack/react-query";
+import useProducts from "../hooks/useProducts";
 
 const initNew = {
   title: "",
@@ -14,7 +12,6 @@ const initNew = {
 };
 
 export default function NewProduct() {
-  const navigate = useNavigate();
   const [img, setImg] = useState("");
   const [product, setProduct] = useState(initNew);
 
@@ -25,15 +22,9 @@ export default function NewProduct() {
     };
   }, []);
 
-  const { isPending, mutate } = useMutation({
-    mutationFn: async ({ img, product }) => {
-      const image = await imageUpload(img);
-      const id = await writeProduct({ image, ...product });
-      return id;
-    },
-    onSuccess: (data) => navigate(`/product/${data}`),
-    onError: (err) => console.error(err),
-  });
+  const {
+    addProduct: { isPending, mutate },
+  } = useProducts();
 
   const handleUpload = (e) => {
     let reader = new FileReader();

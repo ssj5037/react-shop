@@ -1,14 +1,11 @@
 import ProductCard from "./ProductCard";
-import { getProducts } from "../../api/product";
-import { useQuery } from "@tanstack/react-query";
 import SkeletonCard from "./SkeletonCard";
+import useProducts from "../../hooks/useProducts";
 
 export default function ProductList() {
-  const { isLoading, data: products } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => getProducts(),
-    staleTime: 1000 * 60 * 5,
-  });
+  const {
+    productsQuery: { isLoading, data: products },
+  } = useProducts();
 
   if (isLoading)
     return (
