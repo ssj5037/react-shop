@@ -5,29 +5,22 @@ export default function RSInput({
   className,
   value,
   onChange,
+  required,
+  accept,
 }) {
   return (
     <>
-      {type === "number" ? (
-        <input
-          type="number"
-          placeholder={placeholder}
-          className={`border p-3 outline-1 outline-blue-300 ${className}`}
-          name={name}
-          value={value}
-          onChange={onChange}
-          min={0}
-        />
-      ) : (
-        <input
-          type={type}
-          placeholder={placeholder}
-          className={`border p-3 outline-1 outline-blue-300 ${className}`}
-          name={name}
-          value={value}
-          onChange={onChange}
-        />
-      )}
+      <input
+        type={type}
+        accept={accept}
+        min={0}
+        placeholder={placeholder}
+        className={`border p-3 outline-1 outline-blue-300 ${className}`}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
     </>
   );
 }

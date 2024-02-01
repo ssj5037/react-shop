@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RSButton from "../components/RS/RSButton";
 import RSInput from "../components/RS/RSInput";
-import Product from "../api/product";
 import { useNavigate } from "react-router-dom";
+import { imageUpload, writeProduct } from "../api/product";
+import { useMutation } from "@tanstack/react-query";
 
-const url = "https://api.cloudinary.com/v1_1/drag0fgme/image/upload";
 const initNew = {
   title: "",
   price: "",
@@ -12,10 +12,28 @@ const initNew = {
   desc: "",
   sizes: "",
 };
+
 export default function NewProduct() {
   const navigate = useNavigate();
   const [img, setImg] = useState("");
-  const [newProduct, setNewProduct] = useState(initNew);
+  const [product, setProduct] = useState(initNew);
+
+  useEffect(() => {
+    return () => {
+      setImg("");
+      setProduct(initNew);
+    };
+  }, []);
+
+  const { isPending, mutate } = useMutation({
+    mutationFn: async ({ img, product }) => {
+      const image = await imageUpload(img);
+      const id = await writeProduct({ image, ...product });
+      return id;
+    },
+    onSuccess: (data) => navigate(`/product/${data}`),
+    onError: (err) => console.error(err),
+  });
 
   const handleUpload = (e) => {
     let reader = new FileReader();
@@ -25,76 +43,77 @@ export default function NewProduct() {
       setImg(reader.result);
     };
   };
+
   const handleChange = (e) => {
-    setNewProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setProduct((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(product);
   };
-  const product = new Product();
 
   const handleCreate = (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("file", img);
-    formData.append("upload_preset", "y2cbeyrc");
-
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        return response.text();
-      })
-      .then(async (data) => {
-        const image = JSON.parse(data).secure_url;
-        const id = await product.writeProduct({ image, ...newProduct });
-        setNewProduct(initNew);
-        navigate(`/product/${id}`);
-      });
+    mutate({ img, product });
   };
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={handleCreate}>
-      <div className="text-center pb-10 border-b text-4xl mb-10 font-semibold text-blue-500">
+    <section>
+      <h2 className="text-center pb-10 border-b text-4xl mb-10 font-semibold text-blue-500">
         새로운 제품 등록
-      </div>
-      {img && <img src={img} alt="new product image" />}
-      <RSInput type="file" placeholder="제품명" onChange={handleUpload} />
-      <RSInput
-        type="text"
-        placeholder="제품명"
-        name="title"
-        value={newProduct.title}
-        onChange={handleChange}
-      />
-      <RSInput
-        type="number"
-        placeholder="가격"
-        name="price"
-        value={newProduct.price}
-        onChange={handleChange}
-      />
-      <RSInput
-        type="text"
-        placeholder="카테고리"
-        name="category"
-        value={newProduct.category}
-        onChange={handleChange}
-      />
-      <RSInput
-        type="text"
-        placeholder="제품설명"
-        name="desc"
-        value={newProduct.desc}
-        onChange={handleChange}
-      />
-      <RSInput
-        type="text"
-        placeholder="사이즈 옵션(콤마(,)로 구분)"
-        name="sizes"
-        value={newProduct.sizes}
-        onChange={handleChange}
-      />
-      <RSButton className="py-5 text-4xl">제품 등록하기</RSButton>
-    </form>
+      </h2>
+      <form className="flex flex-col gap-5 p-5" onSubmit={handleCreate}>
+        {img && (
+          <img className="w-96 mx-auto" src={img} alt="new product image" />
+        )}
+        <RSInput
+          type="file"
+          accept="image/*"
+          placeholder="제품 이미지"
+          onChange={handleUpload}
+          required
+        />
+        <RSInput
+          type="text"
+          placeholder="제품명"
+          name="title"
+          value={product.title}
+          onChange={handleChange}
+          required
+        />
+        <RSInput
+          type="number"
+          placeholder="가격"
+          name="price"
+          value={product.price}
+          onChange={handleChange}
+          required
+        />
+        <RSInput
+          type="text"
+          placeholder="카테고리"
+          name="category"
+          value={product.category}
+          onChange={handleChange}
+          required
+        />
+        <RSInput
+          type="text"
+          placeholder="제품설명"
+          name="desc"
+          value={product.desc}
+          onChange={handleChange}
+          required
+        />
+        <RSInput
+          type="text"
+          placeholder="사이즈 옵션(콤마(,)로 구분)"
+          name="sizes"
+          value={product.sizes}
+          onChange={handleChange}
+          required
+        />
+        <RSButton className="py-5 text-4xl" disabled={isPending}>
+          {!isPending ? "제품 등록하기" : "제품 등록 중..."}
+        </RSButton>
+      </form>
+    </section>
   );
 }
