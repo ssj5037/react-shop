@@ -24,13 +24,7 @@ export default function Header() {
         <nav className="flex-1 text-blue-950 font-bold ">
           <ul className="flex gap-10">
             <li className="hover:text-blue-400">
-              <Link to="/products/all">All</Link>
-            </li>
-            <li className="hover:text-blue-400">
-              <Link to="/products/top">Top</Link>
-            </li>
-            <li className="hover:text-blue-400">
-              <Link to="/products/bottom">Bottom</Link>
+              <Link to="/products">All</Link>
             </li>
           </ul>
         </nav>
