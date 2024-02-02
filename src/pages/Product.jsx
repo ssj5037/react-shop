@@ -8,7 +8,7 @@ import useCarts from "../hooks/useCarts";
 import useProducts from "../hooks/useProducts";
 
 export default function Product() {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const { id } = useParams();
 
   const {
@@ -22,12 +22,14 @@ export default function Product() {
   const [count, setCount] = useState(1);
   const [size, setSize] = useState("");
 
-  const handleMinus = () =>
-    setCount((count) => (count > 1 ? count - 1 : count));
-  const handlePlus = () =>
-    setCount((count) => (count < 10 ? count + 1 : count));
+  const handleMinus = () => setCount((count) => count - 1);
+  const handlePlus = () => setCount((count) => count + 1);
 
   const handleCart = () => {
+    if (!user) {
+      login();
+      return;
+    }
     if (size === "") {
       setComment("사이즈를 선택하세요.");
       setTimeout(() => {
@@ -92,11 +94,11 @@ export default function Product() {
           <div className="flex justify-between items-center text-2xl">
             <label className="font-semibold">갯수</label>
             <div className="flex justify-between items-center w-4/5">
-              <RSSvgButton onClick={handleMinus}>
+              <RSSvgButton disabled={count <= 1} onClick={handleMinus}>
                 <PiMinus />
               </RSSvgButton>
               <span>{count}</span>
-              <RSSvgButton onClick={handlePlus}>
+              <RSSvgButton disabled={count >= 10} onClick={handlePlus}>
                 <PiPlus />
               </RSSvgButton>
             </div>
@@ -104,7 +106,6 @@ export default function Product() {
           <RSButton
             className="py-3 text-2xl font-semibold"
             onClick={handleCart}
-            disabled={!user}
           >
             장바구니에 추가
           </RSButton>

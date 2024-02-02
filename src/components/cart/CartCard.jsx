@@ -7,18 +7,14 @@ export default function CartCard({ cart }) {
   const { count, image, price, size, title, id } = cart;
   const { updateCarts, deleteCarts } = useCarts();
 
-  const handleDelete = () => deleteCarts(id);
+  const handleDelete = () => deleteCarts.mutate(id);
   const handleMinus = () => {
-    if (count > 1) {
-      const newCart = { ...cart, count: count - 1 };
-      updateCarts.mutate(newCart);
-    }
+    const newCart = { ...cart, count: count - 1 };
+    updateCarts.mutate(newCart);
   };
   const handlePlus = () => {
-    if (count < 10) {
-      const newCart = { ...cart, count: count + 1 };
-      updateCarts.mutate(newCart);
-    }
+    const newCart = { ...cart, count: count + 1 };
+    updateCarts.mutate(newCart);
   };
   return (
     <li className="flex justify-between gap-10">
@@ -34,11 +30,19 @@ export default function CartCard({ cart }) {
         <p>{Number(price).toLocaleString("ko-KR")}원</p>
       </div>
       <div className="flex-1 flex justify-between items-center text-xl">
-        <RSSvgButton onClick={handleMinus} className="w-9 h-9">
+        <RSSvgButton
+          disabled={count <= 1}
+          onClick={handleMinus}
+          className="w-9 h-9"
+        >
           <PiMinus />
         </RSSvgButton>
         <span>{count}</span>
-        <RSSvgButton onClick={handlePlus} className="w-9 h-9">
+        <RSSvgButton
+          disabled={count >= 10}
+          onClick={handlePlus}
+          className="w-9 h-9"
+        >
           <PiPlus />
         </RSSvgButton>
         <RSSvgButton onClick={handleDelete} className="w-9 h-9">
