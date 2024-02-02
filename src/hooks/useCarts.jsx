@@ -8,7 +8,7 @@ export default function useCarts() {
 
   // 장바구니 목록
   const cartsQuery = useQuery({
-    queryKey: ["carts", user.uid || ""],
+    queryKey: ["carts", user?.uid],
     queryFn: () => getCart(user.uid),
     select: (data) => {
       const totalPrice = data.reduce(
