@@ -1,5 +1,7 @@
 # [React Shop](https://enchanting-gelato-cf65e2.netlify.app/)
 
+[![Video Label](http://img.youtube.com/vi/Tu89BtpEvnM/0.jpg)](https://youtu.be/Tu89BtpEvnM)
+
 - 배포: https://enchanting-gelato-cf65e2.netlify.app/
 
 ## 프로젝트 소개
@@ -34,7 +36,7 @@
 
 ### 배운 점
 
-#### 경로 보호 방법
+#### 1. 경로 보호 방법
 
 특정 사용자만 접속할 수 있도록 경로를 보호하고 싶을 때는 보호 라우트 페이지를 추가해주면 된다.
 라우트를 다음과 같이 설정해주고,
@@ -77,7 +79,9 @@ export default function ProtectedRoute({ children, adminRoute }) {
 
 > 추가 참고 링크 : [Setting Up Protected Routes with Firebase and React](https://berkekaragoz.com/p/protected-routes-with-firebase-and-react)
 
-#### Custom Hooks를 생성하여 UI와 Business Logic를 분리하자
+---
+
+#### 2. Custom Hooks를 생성하여 UI와 Business Logic를 분리하자
 
 관련된 Business Logic별로 커스텀 훅을 만들어 사용하게 된다면,
 
@@ -93,12 +97,14 @@ export default function ProtectedRoute({ children, adminRoute }) {
 > 💡 참고 링크
 > [Create custom hooks](https://tkdodo.eu/blog/practical-react-query#create-custom-hooks)
 
-#### Context vs Custom Hook 그리고 상태관리 library
+---
+
+#### 3. Context vs Custom Hook 그리고 상태관리 library
 
 프론트엔드에서 상태(data)를 관리하는데 여러가지 방법이 쓰이고 있는데,
 그 차이에 대해 헷갈리는 부분이 있어 정리를 해 보았다.
 
-##### 1. 리액트 내장 api
+##### 3-1. 리액트 내장 api
 
 - Context (React 16.3)
   - **컴포넌트가 " 값을 사용 " 하기 위하여 클로저를 생성한다.**
@@ -107,7 +113,7 @@ export default function ProtectedRoute({ children, adminRoute }) {
   - **컴포넌트 사이에 " 공통 로직" 을 생성한다.**
     [로직만 공유]하고, 데이터는 custom hook이 호출되는 각 인스턴스에 독립적이다.
 
-##### 2. 외부 상태 라이브러리
+##### 3-2. 외부 상태 라이브러리
 
 1. server state (서버로부터 읽어오는 데이터를 관리)
    - TanStack Query (React Query), swr...
