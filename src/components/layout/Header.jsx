@@ -3,11 +3,13 @@ import { BsCart2, BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import RSButton from "../RS/RSButton";
 import { useAuth } from "../../hooks/useAuth";
-import { useCart } from "../../hooks/useCart";
+import useCarts from "../../hooks/useCarts";
 
 export default function Header() {
   const { user, login, logout } = useAuth();
-  const { data } = useCart();
+  const {
+    cartsQuery: { data },
+  } = useCarts();
 
   return (
     <header className="p-5 pb-6 border-b mb-10 shadow-sm">

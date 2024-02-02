@@ -1,27 +1,23 @@
 import { BsTrash } from "react-icons/bs";
 import { PiMinus, PiPlus } from "react-icons/pi";
 import RSSvgButton from "../RS/RSSvgButton";
-import { useAuth } from "../../hooks/useAuth";
-import { useCart } from "../../hooks/useCart";
+import useCarts from "../../hooks/useCarts";
 
 export default function CartCard({ cart }) {
   const { count, image, price, size, title, id } = cart;
-  const {
-    user: { uid },
-  } = useAuth();
-  const { updateCart, deleteCart, refetch } = useCart();
+  const { updateCarts, deleteCarts } = useCarts();
 
-  const handleDelete = () => deleteCart(uid, id, refetch);
+  const handleDelete = () => deleteCarts(id);
   const handleMinus = () => {
     if (count > 1) {
       const newCart = { ...cart, count: count - 1 };
-      updateCart(uid, newCart, refetch);
+      updateCarts.mutate(newCart);
     }
   };
   const handlePlus = () => {
     if (count < 10) {
       const newCart = { ...cart, count: count + 1 };
-      updateCart(uid, newCart, refetch);
+      updateCarts.mutate(newCart);
     }
   };
   return (

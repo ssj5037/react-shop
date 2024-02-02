@@ -1,12 +1,14 @@
 import { PiEquals, PiPlus } from "react-icons/pi";
 import CartCard from "../components/cart/CartCard";
 import RSButton from "../components/RS/RSButton";
-import { useCart } from "../hooks/useCart";
 import PriceCard from "../components/cart/PriceCard";
+import useCarts from "../hooks/useCarts";
 
 const SHIPPING = 3000;
 export default function Cart() {
-  const { isLoading, data } = useCart();
+  const {
+    cartsQuery: { isLoading, data },
+  } = useCarts();
 
   if (isLoading) return <div>로딩중</div>;
   return (

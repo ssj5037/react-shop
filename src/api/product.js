@@ -62,23 +62,21 @@ export const getCart = async (uid) => {
     .catch(console.error);
 };
 
-export const addCart = async (uid, cart, refetch) => {
-  return await set(ref(database, `carts/${uid}/${cart.id}`), cart)
-    .then(refetch)
-    .catch(console.error);
+export const addCart = async (uid, cart) => {
+  return await set(ref(database, `carts/${uid}/${cart.id}`), cart).catch(
+    console.error
+  );
 };
 
-export const deleteCart = async (uid, cartId, refetch) => {
-  return await remove(ref(database, `carts/${uid}/${cartId}`))
-    .then(refetch)
-    .catch(console.error);
+export const deleteCart = async (uid, cartId) => {
+  return await remove(ref(database, `carts/${uid}/${cartId}`)).catch(
+    console.error
+  );
 };
 
-export const updateCart = async (uid, cart, refetch) => {
+export const updateCart = async (uid, cart) => {
   const updates = {};
   updates[`carts/${uid}/${cart.id}/count`] = cart.count;
 
-  return await update(ref(database), updates)
-    .then(refetch)
-    .catch(console.error);
+  return await update(ref(database), updates).catch(console.error);
 };

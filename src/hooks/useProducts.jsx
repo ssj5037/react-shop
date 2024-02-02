@@ -1,8 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProducts, imageUpload, writeProduct } from "../api/product";
+import {
+  getProduct,
+  getProducts,
+  imageUpload,
+  writeProduct,
+} from "../api/product";
 import { useNavigate } from "react-router-dom";
 
-export default function useProducts() {
+export default function useProducts(productId) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -10,6 +15,13 @@ export default function useProducts() {
   const productsQuery = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  // 제품 상세 데이터
+  const productQuery = useQuery({
+    queryKey: ["product", productId],
+    queryFn: () => getProduct(productId),
     staleTime: 1000 * 60 * 5,
   });
 
@@ -28,5 +40,5 @@ export default function useProducts() {
     onError: (err) => console.error(err),
   });
 
-  return { productsQuery, addProduct };
+  return { productsQuery, productQuery, addProduct };
 }

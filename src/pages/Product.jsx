@@ -1,53 +1,32 @@
 import { PiMinus, PiPlus } from "react-icons/pi";
 import RSButton from "../components/RS/RSButton";
 import RSSvgButton from "../components/RS/RSSvgButton";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getProduct } from "../api/product";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useCart } from "../hooks/useCart";
+import useCarts from "../hooks/useCarts";
+import useProducts from "../hooks/useProducts";
 
 export default function Product() {
   const { user } = useAuth();
   const { id } = useParams();
-  const { isLoading, data: product } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => getProduct(id),
-    staleTime: 1000 * 60 * 5,
-  });
 
-  const { addCart, refetch } = useCart();
+  const {
+    productQuery: { isLoading, data: product },
+  } = useProducts(id);
+  const {
+    addCarts: { mutate },
+  } = useCarts();
 
   const [comment, setComment] = useState("");
   const [count, setCount] = useState(1);
   const [size, setSize] = useState("");
 
-  const { mutate } = useMutation({
-    mutationFn: async () => {
-      const data = {
-        id: `${id}_${size}`,
-        image: product.image,
-        title: product.title,
-        price: product.price,
-        count,
-        size,
-      };
-      await addCart(user.uid, data, refetch);
-    },
-    onSuccess: () => {
-      setComment("장바구니에 등록되었습니다.");
-      setTimeout(() => {
-        setComment("");
-      }, 4 * 1000);
-    },
-    onError: (err) => console.error(err),
-  });
-
   const handleMinus = () =>
     setCount((count) => (count > 1 ? count - 1 : count));
   const handlePlus = () =>
     setCount((count) => (count < 10 ? count + 1 : count));
+
   const handleCart = () => {
     if (size === "") {
       setComment("사이즈를 선택하세요.");
@@ -56,7 +35,20 @@ export default function Product() {
       }, 4 * 1000);
       return;
     }
-    mutate();
+
+    const resultComment = mutate({
+      id: `${id}_${size}`,
+      image: product.image,
+      title: product.title,
+      price: product.price,
+      count,
+      size,
+    });
+
+    setComment(resultComment);
+    setTimeout(() => {
+      setComment("");
+    }, 4 * 1000);
   };
 
   if (isLoading) return <div>로딩중</div>;
